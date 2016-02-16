@@ -1,0 +1,25 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
+import socket
+import random
+
+mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+mySocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+mySocket.bind(('localhost', 8080))
+
+mySocket.listen(5)
+
+
+while True:
+    randnum = random.randint(0,100000000000)
+    print ('Waiting for connections')
+    (recvSocket, address) = mySocket.accept()
+    print ('HTTP request received:')
+    print recvSocket.recv(1024)
+    recvSocket.send("HTTP/1.1 200 OK\r\n\r\n" +
+		    "<html><body><h1>" + "Hola. Dame otra " + "</p>" +
+                    "<a href=" + str(randnum) + "><button>\"Presione aqui!\"</button></a>"
+                     + "</h1></body></html>" + "\r\n")
+    recvSocket.close()
